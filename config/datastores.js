@@ -14,8 +14,7 @@
  */
 
 module.exports.datastores = {
-
-
+ 
   /***************************************************************************
   *                                                                          *
   * Your app's default datastore.                                            *
@@ -33,6 +32,9 @@ module.exports.datastores = {
   ***************************************************************************/
 
   default: {
+    adapter: require('sails-postgresql'),
+    url: 'postgresql://natashagibe@localhost:5432/skosh',
+    
 
     /***************************************************************************
     *                                                                          *
@@ -48,8 +50,6 @@ module.exports.datastores = {
     *    (See https://sailsjs.com/config/datastores for help.)                 *
     *                                                                          *
     ***************************************************************************/
-    // adapter: 'sails-mysql',
-    // url: 'mysql://user:password@host:port/database',
 
   },
 
