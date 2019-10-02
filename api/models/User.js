@@ -5,8 +5,6 @@
  * @docs        :: https://sailsjs.com/docs/concepts/models-and-orm/models
  */
 
-const bcrypt = require('bcrypt-nodejs');
-
 module.exports = {
   tableName: 'users',
   attributes: {

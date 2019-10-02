@@ -30,7 +30,13 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
+  // Login / Logout
+  'POST /login' : 'AuthController.login',
+  'POST /logout': 'AuthController.logout',
+  
   // Register a User
   'POST /register':'UserController.register',
 
+  //authorization test 
+  'GET /testing' : 'TestController.testing',
 };
