@@ -15,13 +15,13 @@ module.exports = {
       }
 
       if (!user) {
-        return res.send({
+        return res.status(400).send({
           message: info.message
         });
       }
 
       req.login(user, function(err) {
-        if (err) return res.send(err);
+        if (err) return res.status(404).send(err);
 
         return res.send({
           user
