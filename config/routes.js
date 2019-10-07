@@ -39,4 +39,10 @@ module.exports.routes = {
 
   //authorization test 
   'GET /testing' : 'TestController.testing',
+
+  // Skoshes
+  'POST /skosh' : 'SkoshController.createSkosh',
+  'GET /users/:user_id/skoshes' : 'SkoshController.listUserSkoshes',
+  'GET /skosh-types' : 'SkoshController.listSkoshTypes',
+  'GET /skosh-types/:skosh_type_id/skoshes' : 'SkoshController.listSkoshes',
 };

@@ -11,7 +11,11 @@
 module.exports.policies = {
     TestController: {
       '*' : 'AuthPolicy'
-    }
+    },
+
+    SkoshController: {
+      '*' : 'AuthPolicy'
+    },
 
   /***************************************************************************
   *                                                                          *
