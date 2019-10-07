@@ -31,9 +31,8 @@ module.exports = {
   },
   customToJSON: function() {
     this['avatar'] = this['avatar'].toString('base64');
-    _.omit(this, ['password']);
 
-    return this;
+    return _.omit(this, ['password']);
   },
   beforeCreate: function (valuesToSet, proceed) {
     // Hash password
