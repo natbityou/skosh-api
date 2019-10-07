@@ -13,6 +13,8 @@
  * https://sailsjs.com/config/datastores
  */
 
+require('dotenv').load();
+
 module.exports.datastores = {
  
   /***************************************************************************
@@ -33,9 +35,8 @@ module.exports.datastores = {
 
   default: {
     adapter: require('sails-postgresql'),
-    url: 'postgresql://natashagibe@localhost:5432/skosh',
+    url: process.env.POSTGRES_URI,
     
-
     /***************************************************************************
     *                                                                          *
     * Want to use a different database during development?                     *
