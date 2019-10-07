@@ -22,10 +22,18 @@ module.exports = {
     password: {
       type: 'string',
       required: true
-    }
+    },
+    avatar:  {
+      type: 'ref',
+      columnType: 'bytea',
+      required: true,
+    },
   },
   customToJSON: function() {
-     return _.omit(this, ['password'])
+    this['avatar'] = this['avatar'].toString('base64');
+    _.omit(this, ['password']);
+
+    return this;
   },
   beforeCreate: function (valuesToSet, proceed) {
     // Hash password
