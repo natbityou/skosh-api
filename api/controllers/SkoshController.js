@@ -10,33 +10,50 @@ const fs = require('fs');
 module.exports = {
   // Upload a Skosh
   createSkosh: async function (req, res) {
-    req.file('image').upload({
-      // don't allow the total upload size to exceed ~10MB
-      maxBytes: 10000000
-    }, async function (err, uploadedFiles) {
-      if (err) return res.serverError(err);
   
-      // If no files were uploaded, respond with an error.
-      if (uploadedFiles.length === 0) {
-        return res.badRequest('Missing image for Skosh');
-      }
+    let uploadImage = () => {
+      return new Promise(
+        (resolve) => {
 
-      fs.readFile(uploadedFiles[0]['fd'], async function read(err, data) {
-        if (err) return res.serverError(err);
+          // Verifies that the image doesn't exceed ~10 MB
+          req.file('image').upload({ maxBytes: 10000000 }, function (err, uploadedFiles) {
+            if (err) return res.badRequest(err);
+        
+            // If no files were uploaded, respond with an error.
+            if (uploadedFiles.length === 0) {
+              return res.badRequest('Missing image for Skosh');
+            }
 
-        let user_id = parseInt(req.user.id, 10);
-        let skosh_type_id = parseInt(req.body.type, 10);
+            resolve(uploadedFiles[0]);
+          });
+        }
+      );
+    };
 
-        await Skosh.create({
-          user_id: user_id,
-          skosh_type: skosh_type_id,
-          caption: req.body.caption,
-          image: data,
-        });
+    let readImageData = (filepath) => {
+      return new Promise(
+        (resolve, reject) => {
+          fs.readFile(filepath, function (err, fileData) {
+            if (err) reject(err);
 
-        return res.ok();
-      });
-    })
+            resolve(fileData);
+          });
+        }
+      );
+    };
+
+    let image = await uploadImage();
+    
+    let imageData = await readImageData(image['fd']);
+
+    await Skosh.create({
+      user_id: parseInt(req.user.id, 10),
+      skosh_type: parseInt(req.body.type, 10),
+      caption: req.body.caption,
+      image: imageData,
+    });
+    
+    return res.ok();
   },
   // Get data for Skosh cards on homepage
   listSkoshTypes: async function (req, res) {

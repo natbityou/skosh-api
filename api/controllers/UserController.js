@@ -9,30 +9,47 @@ const fs = require('fs');
 
 module.exports = {
   register: async function (req, res) {
+    
+    let uploadImage = () => {
+      return new Promise(
+        (resolve) => {
 
-    req.file('avatar').upload({
-      // don't allow the total upload size to exceed ~10MB
-      maxBytes: 10000000
-    }, async function (err, uploadedFiles) {
-      if (err) return res.serverError(err);
-  
-      // If no avatar was uploaded, respond with an error.
-      if (uploadedFiles.length === 0) {
-        return res.badRequest('Missing avatar for User');
-      }
+          // Verifies that the image doesn't exceed ~10 MB
+          req.file('avatar').upload({ maxBytes: 10000000 }, function (err, uploadedFiles) {
+            if (err) return res.badRequest(err);
+        
+            // If no files were uploaded, respond with an error.
+            if (uploadedFiles.length === 0) {
+              return res.badRequest('Missing avatar for User');
+            }
 
-      fs.readFile(uploadedFiles[0]['fd'], async function read(err, data) {
-        if (err) return res.serverError(err);
+            resolve(uploadedFiles[0]);
+          });
+        }
+      );
+    };
 
-        await User.create({
-          email: req.body.email,
-          username: req.body.username,
-          password: req.body.password,
-          avatar: data,
-        });
+    let readImageData = (filepath) => {
+      return new Promise(
+        (resolve, reject) => {
+          fs.readFile(filepath, function (err, fileData) {
+            if (err) reject(err);
 
-        return res.ok();
-      });
+            resolve(fileData);
+          });
+        }
+      );
+    };
+
+    let image = await uploadImage();
+    
+    let imageData = await readImageData(image['fd']);
+
+    await User.create({
+      email: req.body.email,
+      username: req.body.username,
+      password: req.body.password,
+      avatar: imageData,
     });
   },
 };
