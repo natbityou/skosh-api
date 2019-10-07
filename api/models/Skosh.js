@@ -9,7 +9,9 @@ module.exports = {
   tableName: 'skoshes',
   attributes: {
     user_id: {
-      type: 'number',
+      type: 'ref',
+      columnType: 'bigint',
+      isNumber: true,
       required: true,
     },
     skosh_type: {
