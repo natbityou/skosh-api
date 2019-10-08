@@ -6,10 +6,11 @@
  */
 
 const passport = require('passport');
+const jwt = require('jsonwebtoken');
 
 module.exports = {
   login: function(req, res) {
-    passport.authenticate('local', function(err, user, info){
+    passport.authenticate('local', { session: false }, function(err, user, info) {
       if (err) {
         return res.send(err);
       }
@@ -20,11 +21,16 @@ module.exports = {
         });
       }
 
-      req.login(user, function(err) {
+      req.login(user, { session: false }, function(err) {
         if (err) return res.status(404).send(err);
 
+        user = _.omit(user, ['password', 'avatar', 'createdAt', 'updatedAt']);
+
+        const token = jwt.sign(user, process.env.JWT_SECRET);
+           
         return res.send({
-          user
+          user,
+          token
         });
       });
     })(req, res);

@@ -12,6 +12,7 @@
     "grunt": "1.0.4",
     "jsonwebtoken": "^8.5.1",
     "passport": "^0.4.0",
+    "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
     "sails": "^1.2.3",
     "sails-hook-dotenv": "^0.1.1",
