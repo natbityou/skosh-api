@@ -51,6 +51,8 @@ module.exports = {
       password: req.body.password,
       avatar: imageData,
     });
+
+    return res.ok();
   },
 };
 
