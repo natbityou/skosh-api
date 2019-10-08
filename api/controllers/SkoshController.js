@@ -94,7 +94,7 @@ module.exports = {
     // Need to use special query to avoid selecting image data
     // Also want to get User data along with the skoshes
     var SKOSH_QUERY = `
-    SELECT skoshes.likes, skoshes.user_id, users.id, users.username
+    SELECT skoshes.likes, skoshes.id, skoshes.user_id, users.username
     FROM skoshes
     JOIN users ON users.id = skoshes.user_id
     WHERE skoshes.skosh_type = $1`;
