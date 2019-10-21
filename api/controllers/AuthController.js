@@ -24,9 +24,9 @@ module.exports = {
       req.login(user, { session: false }, function(err) {
         if (err) return res.status(404).send(err);
 
-        user = _.omit(user, ['password', 'avatar', 'createdAt', 'updatedAt']);
+        tokenizedUser = _.omit(user, ['password', 'avatar', 'createdAt', 'updatedAt']);
 
-        const token = jwt.sign(user, process.env.JWT_SECRET);
+        const token = jwt.sign(tokenizedUser, process.env.JWT_SECRET);
            
         return res.send({
           user,

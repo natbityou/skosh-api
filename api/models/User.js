@@ -32,7 +32,7 @@ module.exports = {
   customToJSON: function() {
     this['avatar'] = this['avatar'].toString('base64');
 
-    return _.omit(this, ['password']);
+    return _.omit(this, ['password', 'createdAt', 'updatedAt']);
   },
   beforeCreate: function (valuesToSet, proceed) {
     // Hash password
