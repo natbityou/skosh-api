@@ -6,6 +6,7 @@
  */
 
 const fs = require('fs');
+const sharp = require('sharp');
 
 module.exports = {
   // Upload a Skosh
@@ -43,14 +44,18 @@ module.exports = {
     };
 
     let image = await uploadImage();
-    
     let imageData = await readImageData(image['fd']);
+
+    let compressedImageData = await sharp(imageData)
+      .resize(100)
+      .webp()
+      .toBuffer();
 
     await Skosh.create({
       user_id: parseInt(req.user.id, 10),
       skosh_type: parseInt(req.body.type, 10),
       caption: req.body.caption,
-      image: imageData,
+      image: compressedImageData,
     });
     
     return res.ok();

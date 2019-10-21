@@ -6,6 +6,7 @@
  */
 
 const fs = require('fs');
+const sharp = require('sharp');
 
 module.exports = {
   register: async function (req, res) {
@@ -42,14 +43,18 @@ module.exports = {
     };
 
     let image = await uploadImage();
-    
     let imageData = await readImageData(image['fd']);
+
+    let compressedImageData = await sharp(imageData)
+      .resize(100)
+      .webp()
+      .toBuffer();
 
     await User.create({
       email: req.body.email,
       username: req.body.username,
       password: req.body.password,
-      avatar: imageData,
+      avatar: compressedImageData,
     });
 
     return res.ok();
