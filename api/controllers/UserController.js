@@ -47,7 +47,7 @@ module.exports = {
 
     let compressedImageData = await sharp(imageData)
       .resize(100)
-      .webp()
+      .png()
       .toBuffer();
 
     await User.create({

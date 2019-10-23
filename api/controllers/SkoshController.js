@@ -48,7 +48,7 @@ module.exports = {
 
     let compressedImageData = await sharp(imageData)
       .resize(100)
-      .webp()
+      .png()
       .toBuffer();
 
     await Skosh.create({
@@ -99,16 +99,29 @@ module.exports = {
     // Need to use special query to avoid selecting image data
     // Also want to get User data along with the skoshes
     var SKOSH_QUERY = `
-    SELECT skoshes.likes, skoshes.id, skoshes.user_id, users.username
+    SELECT skoshes.user_id, users.avatar
     FROM skoshes
     JOIN users ON users.id = skoshes.user_id
-    WHERE skoshes.skosh_type = $1`;
+    WHERE skoshes.skosh_type = $1
+    ORDER BY skoshes."createdAt" DESC`;
+
     
     let skoshTypeId = parseInt(req.params.skosh_type_id, 10);
 
-    var results = await Skosh.getDatastore().sendNativeQuery(SKOSH_QUERY, [ skoshTypeId ]);
+    var queryResults = await Skosh.getDatastore().sendNativeQuery(SKOSH_QUERY, [ skoshTypeId ]);
 
-    return res.ok(results['rows']);
+    results = [];
+
+    queryResults['rows'].forEach(row => {
+      result = {
+        'user_id' : row['user_id'],
+        'avatar' : row['avatar'].toString('base64'),
+      };
+
+      results.push(result);
+    });
+
+    return res.ok(results);
   },
   // List all Skoshes from a specific user (:user_id)
   listUserSkoshes: async function (req, res) {
