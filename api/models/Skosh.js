@@ -34,7 +34,13 @@ module.exports = {
   },
   customToJSON: function() {
     this['image'] = this['image'].toString('base64');
+
+    var createdAtDate = new Date(this['createdAt']);
+    this['createdAt'] = createdAtDate.toISOString().slice(0, 10);
     
+    var updatedAtDate = new Date(this['updatedAt']);
+    this['updatedAt'] = updatedAtDate.toISOString().slice(0, 10);
+
     return this;
   },
 };

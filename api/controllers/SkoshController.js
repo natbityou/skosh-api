@@ -47,7 +47,7 @@ module.exports = {
     let imageData = await readImageData(image['fd']);
 
     let compressedImageData = await sharp(imageData)
-      .resize(100)
+      .resize(250)
       .png()
       .toBuffer();
 
@@ -99,7 +99,7 @@ module.exports = {
     // Need to use special query to avoid selecting image data
     // Also want to get User data along with the skoshes
     var SKOSH_QUERY = `
-    SELECT skoshes.user_id, users.avatar
+    SELECT skoshes.user_id, users.avatar, users.username
     FROM skoshes
     JOIN users ON users.id = skoshes.user_id
     WHERE skoshes.skosh_type = $1
@@ -116,6 +116,7 @@ module.exports = {
       result = {
         'user_id' : row['user_id'],
         'avatar' : row['avatar'].toString('base64'),
+        'username' : row['username']
       };
 
       results.push(result);
