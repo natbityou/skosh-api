@@ -128,6 +128,7 @@ module.exports = {
   listUserSkoshes: async function (req, res) {
     let skoshes = await Skosh.find({
       where: { user_id: req.params.user_id },
+      sort: 'createdAt DESC'
     });
 
     return res.ok(skoshes);
